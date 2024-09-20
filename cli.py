@@ -64,5 +64,69 @@ def place_order(user_id, product_id, quantity):
     session.commit()
     click.echo(f'Order placed for User ID {user_id} with Product ID {product_id}.')
 
+@cli.command()
+@click.option('--product_id', prompt='Product ID', help='The ID of the product to delete.', type=int)
+def delete_product(product_id):
+    """Delete a product by ID."""
+    session = Session()
+    product = session.query(Product).filter(Product.id == product_id).first()
+    if product:
+        session.delete(product)
+        session.commit()
+        click.echo(f'Product with ID {product_id} deleted!')
+    else:
+        click.echo(f'Product with ID {product_id} not found.')
+    session.close()
+
+@cli.command()
+@click.option('--product_id', prompt='Product ID', help='The ID of the product to update.', type=int)
+@click.option('--name', prompt='New Product Name', help='The new name of the product.')
+@click.option('--unit', prompt='New Unit', help='New unit of measurement for the product.')
+@click.option('--price', prompt='New Price', type=float, help='New price of the product.')
+def update_product(product_id, name, unit, price):
+    """Update a product by ID."""
+    session = Session()
+    product = session.query(Product).filter(Product.id == product_id).first()
+    if product:
+        product.name = name
+        product.unit = unit
+        product.price = price
+        session.commit()
+        click.echo(f'Product with ID {product_id} updated!')
+    else:
+        click.echo(f'Product with ID {product_id} not found.')
+    session.close()
+
+@cli.command()
+@click.option('--user_id', prompt='User ID', help='The ID of the user to delete.', type=int)
+def delete_user(user_id):
+    """Delete a user by ID."""
+    session = Session()
+    user = session.query(User).filter(User.id == user_id).first()
+    if user:
+        session.delete(user)
+        session.commit()
+        click.echo(f'User with ID {user_id} deleted!')
+    else:
+        click.echo(f'User with ID {user_id} not found.')
+    session.close()
+
+@cli.command()
+@click.option('--user_id', prompt='User ID', help='The ID of the user to update.', type=int)
+@click.option('--name', prompt='New User Name', help='The new name of the user.')
+@click.option('--email', prompt='New User Email', help='The new email of the user.')
+def update_user(user_id, name, email):
+    """Update a user by ID."""
+    session = Session()
+    user = session.query(User).filter(User.id == user_id).first()
+    if user:
+        user.name = name
+        user.email = email
+        session.commit()
+        click.echo(f'User with ID {user_id} updated!')
+    else:
+        click.echo(f'User with ID {user_id} not found.')
+    session.close()
+
 if __name__ == '__main__':
     cli()
