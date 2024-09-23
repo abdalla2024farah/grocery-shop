@@ -128,5 +128,14 @@ def update_user(user_id, name, email):
         click.echo(f'User with ID {user_id} not found.')
     session.close()
 
+@cli.command()
+def view_orders():
+    """View all orders."""
+    session = Session()
+    orders = session.query(Order).all()
+    for order in orders:
+        click.echo(f'Order ID: {order.id}, User ID: {order.user_id}, Product ID: {order.product_id}, Quantity: {order.quantity}')
+    session.close()
+
 if __name__ == '__main__':
     cli()
